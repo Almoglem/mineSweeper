@@ -1,4 +1,5 @@
 const MINE = '💣';
+const FLAG = '🚩'
 
 var gBoard;
 
@@ -78,6 +79,7 @@ function placeMines(num, iExclude, jExclude) {
     }
 }
 
+//////////////////////// game actions such as clicks ////////////////////////
 
 function cellClicked(elCell, i, j) {
     var cell = gBoard[i][j];
@@ -110,6 +112,26 @@ function cellClicked(elCell, i, j) {
         if (isWin()) gameOver('win');
     }
 }
+
+
+function handleFlag(elCell, i, j) {
+    cell = gBoard[i][j];
+
+    if (!gGame.isOn) return;
+    if (cell.isShown) return;
+
+    if (!cell.isMarked) {
+        renderCell(i, j, FLAG);
+        cell.isMarked = true;
+    } else {
+        renderCell(i, j, ' ');
+        cell.isMarked = false;
+    }
+}
+
+
+
+/////////// game over, win, restart, etc.
 
 function gameOver(status) {
     gGame.isOn = false;

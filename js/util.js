@@ -1,4 +1,6 @@
 
+///// renders /////
+
 function renderBoard(board) {
     var strHTML = '';
 
@@ -6,7 +8,8 @@ function renderBoard(board) {
         strHTML += '<tr>';
         for (var j = 0; j < board[0].length; j++) {
             var className = `cell cell${i}-${j}`
-            strHTML += `<td class="${className}" onclick="cellClicked(this, ${i}, ${j})"> </td>`;
+            strHTML += `<td class="${className}" onclick="cellClicked(this, ${i}, ${j})" 
+            oncontextmenu="handleFlag(this, ${i}, ${j}); return false;"> </td>`;
         }
     }
     strHTML += '</tr>';
@@ -17,10 +20,6 @@ function renderBoard(board) {
 function renderCell(i, j, value) {
     var elCell = document.querySelector(`.cell${i}-${j}`);
     elCell.innerHTML = value;
-}
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function renderBombs() {
@@ -43,4 +42,11 @@ function renderNegs(mat, rowIdx, colIdx) {
             renderCell(i, j, currCell.minesAroundCount);
         }
     }
+}
+
+
+////////////////////////////////////////
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
