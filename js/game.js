@@ -2,28 +2,30 @@ const MINE = '💣';
 
 var gBoard;
 
+
 var gGame = {
     isOn: false,
+    firstClick: true,
     shownCount: 0,
     markedCount: 0,
     secsPassed: 0
 }
 
+var gLevel = {
+    size: 4,
+    mines: 2
+}; ///// later change according to user selected level
 
 function init() {
     gBoard = buildBoard();
     renderBoard(gBoard);
-    gGame.isOn = false;
-    gGame.shownCount = 0;
-    gGame.markedCount = 0;
-    gGame.secsPassed = 0;
 }
 
 function buildBoard() {
     var board = [];
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < gLevel.size; i++) {
         board.push([]);
-        for (var j = 0; j < 4; j++) {
+        for (var j = 0; j < gLevel.size; j++) {
             var cell = {
                 minesAroundCount: null,
                 isShown: false,
@@ -78,15 +80,36 @@ function placeMines(num, iExclude, jExclude) {
 
 function cellClicked(elCell, i, j) {
     var cell = gBoard[i][j];
-    if (!gGame.isOn) {
-        placeMines(2, i, j);
+    ///first click of the game
+    if (!gGame.isOn && gGame.firstClick) {
+        placeMines(gLevel.mines, i, j);
         gGame.isOn = true;
+        gGame.firstClick = false;
         setMinesNegsCount();
+        ///mine
     } else if (cell.isMine) {
-        elCell.innerHTML = MINE;
+        renderBombs();
+        gameOver();
         return;
-        ///show all mines (render whole board)
-        /// game over
     }
-    if (cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
+    ///// cell with mines around
+    if (gGame.isOn && cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
+    ///// cell with no mines around- show neighboars
+    else if (gGame.isOn) renderNegs(gBoard, i, j);
+    /// in any case besides mine
+    cell.isShown = true;
+}
+
+function gameOver() {
+    gGame.isOn = false;
+    document.querySelector('.restart').classList.remove('hidden');
+}
+
+function restart() {
+    gGame.isOn = false;
+    gGame.firstClick = true;
+    gGame.shownCount = 0;
+    gGame.markedCount = 0;
+    gGame.secsPassed = 0;
+    init();
 }
