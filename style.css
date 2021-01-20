@@ -1,5 +1,6 @@
 body {
     text-align: center;
+    background-color: rgb(182, 182, 204);
 }
 
 
@@ -9,7 +10,7 @@ body {
 
 
 .game-board table, td {
-    border: 2px solid gray;
+    border: 2px solid black;
     border-collapse: collapse;
 }
 

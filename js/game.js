@@ -13,7 +13,8 @@ var gGame = {
 
 var gLevel = {
     size: 4,
-    mines: 2
+    mines: 2,
+    lives: 1
 }; ///// later change according to user selected level
 
 function init() {
@@ -80,32 +81,58 @@ function placeMines(num, iExclude, jExclude) {
 
 function cellClicked(elCell, i, j) {
     var cell = gBoard[i][j];
-    ///first click of the game
+
+    ///first click of the game- places mines and sets game on
     if (!gGame.isOn && gGame.firstClick) {
         placeMines(gLevel.mines, i, j);
         gGame.isOn = true;
         gGame.firstClick = false;
         setMinesNegsCount();
+
         ///mine
     } else if (cell.isMine) {
         renderBombs();
         gameOver();
         return;
     }
-    ///// cell with mines around
-    if (gGame.isOn && cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
-    ///// cell with no mines around- show neighboars
-    else if (gGame.isOn) renderNegs(gBoard, i, j);
-    /// in any case besides mine
-    cell.isShown = true;
+
+    /// rest- as long as game is on and cell is not mine
+    if (gGame.isOn) {
+        ///// cell with mines around
+        if (cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
+        ///// cell with no mines around- show neighboars
+        else {
+            renderNegs(gBoard, i, j);
+        }
+        /// in any case:
+        elCell.style = 'background-color: gray;'
+        cell.isShown = true;
+        if (isWin()) gameOver('win');
+    }
 }
 
-function gameOver() {
+function gameOver(status) {
     gGame.isOn = false;
     document.querySelector('.restart').classList.remove('hidden');
+    var resultShow = document.querySelector('.game-result');
+    if (status === 'win') resultShow.innerText = 'won!'
+    else resultShow.innerText = 'lost!'
 }
 
+function isWin() {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            if (gBoard[i][j].isMine) continue;
+            if (!gBoard[i][j].isShown) return false;
+        }
+    }
+    return true;
+}
+
+
 function restart() {
+    document.querySelector('.restart').classList.add('hidden');
+    document.querySelector('.game-result').innerText = '';
     gGame.isOn = false;
     gGame.firstClick = true;
     gGame.shownCount = 0;

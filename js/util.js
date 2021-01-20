@@ -38,6 +38,8 @@ function renderNegs(mat, rowIdx, colIdx) {
             if (j < 0 || j > mat[0].length - 1) continue;
             if (i === rowIdx && j === colIdx) continue;
             var currCell = mat[i][j];
+            currCell.isShown = true;
+            document.querySelector(`.cell${i}-${j}`).style = 'background-color: gray;'
             renderCell(i, j, currCell.minesAroundCount);
         }
     }
