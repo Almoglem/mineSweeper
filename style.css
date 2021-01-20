@@ -1,0 +1,23 @@
+body {
+    text-align: center;
+}
+
+
+.game-board table{
+    margin: auto;
+}
+
+
+.game-board table, td {
+    border: 2px solid gray;
+    border-collapse: collapse;
+}
+
+.game-board table td{
+    height: 30px;
+    width: 30px;
+}
+
+/* .game-board table td{
+
+} */
