@@ -10,20 +10,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="init()">
+<body onload="init('easy')">
     <h1>🚩Mine Sweeper🚩</h1>
-    <div class="options-info">
-        <span class="level-choice">
-            <button onclick="handleLevel('easy')">easy</button>
-            <button onclick="handleLevel('medium')">medium</button>
-            <button onclick="handleLevel('hard')">hard</button></span>
-        <span class="lives"></span>
-        <span class="timer">00:00</span>
-        <br>
-        <span class="player" onclick="restart()"></span>
+    <div class="game-main">
+        <div class="options-info">
+            <span class="level-choice">
+                <button onclick="handleLevel('easy')">easy</button>
+                <button onclick="handleLevel('medium')">medium</button>
+                <button onclick="handleLevel('hard')">hard</button></span>
+            <br>
+            <span class="timer">00:00</span>
+            <br>
+            <span class="player" onclick="restart()"></span> <span class="lives"></span>
+        </div>
+        <div class="game-board">
+            <table></table>
+        </div>
+        <div class="best-time"></div>
     </div>
-    <div class="game-board">
-        <table></table>
+
+    <span class="guide-btn" onclick="guideToggle()">❌</span>
+    <div class="guide">
+        welcome! <br>
+        <br>
+        💣your goal is to mark all mines with flags. <br>
+        you win when all mines are flagged and all other cells are shown. <br>
+        🏁you flag by using right click. you can right click again to unflag a cell. <br>
+        <br>
+        💢easy: 2 mines, 1 lives <br>
+        💢medium: 12 mines, 3 lives <br>
+        💢hard: 30 mines, 3 lives <br>
+        💟 on medium/ hard levels, if you click on a mine, you lose one life, and can continue playing as long as you
+        have at least 1 life left.
+        <br> <br>
+        😸 game started <br>
+        🙀💔 lost - game over <br>
+        😻 won <br>
+        😿 lost a life (medium\ hard only) <br>
+        💢play again or restart anytime by clicking on the cat <br>
+        <br>
+        good luck, and DON'T BLOW IT UP!
     </div>
     <script src="js/util.js"></script>
     <script src="js/game.js"></script>

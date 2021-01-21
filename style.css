@@ -10,17 +10,27 @@ h1 {
     margin: 1% auto;
 }
 
-.options-info{
-    margin: 1% auto;
-    /* background-color: gray;
-    height: 30px;
-    width: 300px; */
+.game-main {
+    margin: auto;
+    background-color: #ffd0c4;
+    display: inline-block;
 }
+
 
 button {
     font-family: 'Chakra Petch', sans-serif;
     border-radius: 10%;
     background-color: #ecc1c1;
+}
+
+button:active {
+    font-weight: bold;
+}
+
+
+.lives {
+    position: absolute;
+    margin-top: 0.5%;
 }
 
 .game-board table{
@@ -43,3 +53,25 @@ button {
     display: none;
 }
 
+span.player{
+font-size: x-large;
+}
+
+.guide {
+    text-align: left;
+    background-color: #ffd0c4;
+    width: 340px;
+    position: absolute;
+    left: 10px;
+    top: 42px;
+}
+
+.guide-btn {
+    text-align: center;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    left: 10px;
+}

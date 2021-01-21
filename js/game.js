@@ -1,10 +1,11 @@
 const MINE = '💣';
 const FLAG = '🚩'
+const NORMAL = '🐱'
 const HAPPY = '😸';
 const SAD = '😿';
 const DEAD = '🙀';
 const HAPPY_WIN = '😻';
-var gElPlayer = document.querySelector('.player');
+var gElPlayer = document.querySelector('.player'); /// global as used several times in different functions
 
 var gBoard;
 
@@ -13,15 +14,32 @@ var gGame = {
     shownCount: 0, markedCount: 0, secsPassed: 0
 }
 
-var gLevel = { size: 4, mines: 2, lives: 1 };
+var gLevel = { size: 4, mines: 2, lives: 1, bestTime: localStorage.besttimeeasy }; /// SET TO EASY BY DEFULT
 var gElLives = document.querySelector('.lives');
+
+//// note about everything related to localStorage: it works, but my code is probably a bit messy / repetitive
+//// as i haven't got to practice it's use yet
+
+if (!localStorage.besttimeeasy) localStorage.setItem("besttimeeasy", Infinity);
+if (!localStorage.besttimemedium) localStorage.setItem("besttimemedium", Infinity);
+if (!localStorage.besttimehard) localStorage.setItem("besttimehard", Infinity);
+
 
 ///////////////  game starting functions 
 
 function init() {
-    gElPlayer.innerText = HAPPY;
+    gElPlayer.innerText = NORMAL;
     gBoard = buildBoard(gLevel.size);
     renderBoard(gBoard);
+
+    if (gLevel.bestTime === Infinity) return;
+    var elBestTimeDisplay = document.querySelector('.best-time');
+
+    if (gLevel.bestTime < 60) elBestTimeDisplay.innerText = `Best time: ${gLevel.bestTime} seconds`
+    else if (gLevel.bestTime > 60) {
+        var bestTimeMins = (gLevel.bestTime / 60).toFixed(2)
+        elBestTimeDisplay.innerText = `Best time: ${bestTimeMins} minutes`
+    }
     if (gLevel.size === 4) gElLives.innerText = '💟'
     else gElLives.innerText = '💟💟💟'
 }
@@ -32,16 +50,19 @@ function handleLevel(level) {
             gLevel.size = 4;
             gLevel.mines = 2;
             gLevel.lives = 1;
+            gLevel.bestTime = +localStorage.besttimeeasy;
             break;
         case 'medium':
             gLevel.size = 8;
             gLevel.mines = 12;
             gLevel.lives = 3;
+            gLevel.bestTime = +localStorage.besttimemedium;
             break;
         case 'hard':
             gLevel.size = 12;
             gLevel.mines = 30;
             gLevel.lives = 3;
+            gLevel.bestTime = +localStorage.besttimehard;
             break;
     }
     gameOver();
@@ -120,6 +141,7 @@ function cellClicked(elCell, i, j) {
         gGame.firstClick = false;
         startClock();
         setMinesNegsCount();
+        gElPlayer.innerText = HAPPY;
 
         ///mine
     } else if (cell.isMine) {
@@ -127,6 +149,7 @@ function cellClicked(elCell, i, j) {
         if (gLevel.lives > 1) {
             gLevel.lives--;
             renderCell(i, j, MINE);
+            ///render the updated lives
             if (gLevel.lives === 2) gElLives.innerText = '💟💟';
             else if (gLevel.lives === 1) gElLives.innerText = '💟';
             gElPlayer.innerText = SAD;
@@ -134,10 +157,11 @@ function cellClicked(elCell, i, j) {
         }
         else if (gLevel.lives === 1) {
             renderBombs();
-            gameOver();
+            gameOver('lost');
             return;
         }
     }
+
     /// rest- as long as game is on and cell is not mine
     if (gGame.isOn) {
         ///// cell with mines around
@@ -176,8 +200,18 @@ function handleFlag(i, j) {
 function gameOver(status) {
     stopClock();
     gGame.isOn = false;
-    if (status === 'win') gElPlayer.innerText = HAPPY_WIN;
-    else {
+
+    if (status === 'win') {
+        gElPlayer.innerText = HAPPY_WIN;
+        var currGameTime = gGame.secsPassed;
+        if (gLevel.size === 4) {
+            if (currGameTime < +localStorage.besttimeeasy) localStorage.besttimeeasy = currGameTime;
+        } else if (gLevel.size === 8) {
+            if (currGameTime < +localStorage.besttimemedium) localStorage.besttimemedium = currGameTime;
+        } else if (gLevel.size === 12) {
+            if (currGameTime < +localStorage.besttimehard) localStorage.besttimehard = currGameTime;
+        }
+    } else if (status === 'lost') {
         gElLives.innerText = '💔';
         gElPlayer.innerText = DEAD;
     }
@@ -195,6 +229,7 @@ function isWin() {
 
 
 function restart() {
+    stopClock();
     gGame.isOn = false;
     gGame.firstClick = true;
     gGame.shownCount = 0;
@@ -203,5 +238,17 @@ function restart() {
     document.querySelector('.timer').innerHTML = '00:00';
     gStartTime = null;
     gTimeElasped = null;
+    document.querySelector('.best-time').innerText = '';
     init();
+}
+
+
+///// guide 
+function guideToggle() {
+    var elGuideBtn = document.querySelector('.guide-btn');
+    if (elGuideBtn.innerText === '❌') elGuideBtn.innerText = '❔';
+    else elGuideBtn.innerText = '❌';
+
+    var elGuide = document.querySelector('.guide');
+    elGuide.classList.toggle('hidden');
 }
