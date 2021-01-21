@@ -36,17 +36,24 @@ function renderNegs(mat, rowIdx, colIdx) {
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             if (j < 0 || j > mat[0].length - 1) continue;
             if (i === rowIdx && j === colIdx) continue;
-            var currCell = mat[i][j];
-            if (currCell.isMarked) continue;
-            currCell.isShown = true;
+
+            var currNr = mat[i][j];
+            if (currNr.isMarked || currNr.isShown) continue;
+
+            renderCell(i, j, currNr.minesAroundCount);
+            currNr.isShown = true;
             document.querySelector(`.cell${i}-${j}`).style = 'background-color: #e4d1d1;'
-            renderCell(i, j, currCell.minesAroundCount);
+            if (!currNr.minesAroundCount) renderNegs(mat, i, j);
         }
     }
 }
 
 
 /////////////// timer related functions
+
+var gStartTime;
+var gTimeElasped;
+var gTimeInterval;
 
 function startClock() {
     elTimer = document.querySelector('.timer');
