@@ -14,7 +14,7 @@ var gGame = {
     shownCount: 0, markedCount: 0, secsPassed: 0
 }
 
-var gLevel = { size: 4, mines: 2, lives: 1, bestTime: localStorage.besttimeeasy }; /// SET TO EASY BY DEFULT
+var gLevel = { size: 4, mines: 2, lives: 1 }; /// SET TO EASY BY DEFULT
 var gElLives = document.querySelector('.lives');
 
 //// note about everything related to localStorage: it works, but my code is probably a bit messy / repetitive
