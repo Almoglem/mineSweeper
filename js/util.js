@@ -1,5 +1,5 @@
 
-///// renders /////
+/////////////// renders 
 
 function renderBoard(board) {
     var strHTML = '';
@@ -9,7 +9,7 @@ function renderBoard(board) {
         for (var j = 0; j < board[0].length; j++) {
             var className = `cell cell${i}-${j}`
             strHTML += `<td class="${className}" onclick="cellClicked(this, ${i}, ${j})" 
-            oncontextmenu="handleFlag(this, ${i}, ${j}); return false;"> </td>`;
+            oncontextmenu="handleFlag(${i}, ${j}); return false;"> </td>`;
         }
     }
     strHTML += '</tr>';
@@ -37,15 +37,34 @@ function renderNegs(mat, rowIdx, colIdx) {
             if (j < 0 || j > mat[0].length - 1) continue;
             if (i === rowIdx && j === colIdx) continue;
             var currCell = mat[i][j];
+            if (currCell.isMarked) continue;
             currCell.isShown = true;
-            document.querySelector(`.cell${i}-${j}`).style = 'background-color: gray;'
+            document.querySelector(`.cell${i}-${j}`).style = 'background-color: #e4d1d1;'
             renderCell(i, j, currCell.minesAroundCount);
         }
     }
 }
 
 
-////////////////////////////////////////
+/////////////// timer related functions
+
+function startClock() {
+    elTimer = document.querySelector('.timer');
+    gTimeInterval = setInterval(function () {
+        var timeArr = new Date(gGame.secsPassed * 1000).toString().split(':');
+        var minutes = timeArr[1];
+        var seconds = timeArr[2].split(' ')[0];
+        elTimer.innerText = `${minutes}:${seconds}`;
+        gGame.secsPassed++;
+    }, 1000);
+}
+
+function stopClock() {
+    clearInterval(gTimeInterval);
+    gTimeInterval = null;
+}
+
+/////////////// others
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;

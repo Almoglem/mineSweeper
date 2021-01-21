@@ -4,17 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Mine Sweeper</title>
+    <title>Mine Sweeper</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body onload="init()">
-    <h1>Welcome to my game</h1>
+    <h1>🚩Mine Sweeper🚩</h1>
+    <div class="options-info">
+        <span class="level-choice">
+            <button onclick="handleLevel('easy')">easy</button>
+            <button onclick="handleLevel('medium')">medium</button>
+            <button onclick="handleLevel('hard')">hard</button></span>
+        <span class="lives"></span>
+        <span class="timer">00:00</span>
+        <br>
+        <span class="player" onclick="restart()"></span>
+    </div>
     <div class="game-board">
         <table></table>
     </div>
-    <div class="game-result"></div>
-    <div> <button class="restart hidden" onclick="restart()">restart</button></div>
     <script src="js/util.js"></script>
     <script src="js/game.js"></script>
 </body>

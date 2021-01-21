@@ -1,8 +1,27 @@
 body {
     text-align: center;
-    background-color: rgb(182, 182, 204);
+    background-color:#FFD8CC;
+    font-family: 'Chakra Petch', sans-serif;
 }
 
+h1 {
+    color: rgb(78, 78, 78);
+    font-size: 30px;
+    margin: 1% auto;
+}
+
+.options-info{
+    margin: 1% auto;
+    /* background-color: gray;
+    height: 30px;
+    width: 300px; */
+}
+
+button {
+    font-family: 'Chakra Petch', sans-serif;
+    border-radius: 10%;
+    background-color: #ecc1c1;
+}
 
 .game-board table{
     margin: auto;
@@ -10,15 +29,17 @@ body {
 
 
 .game-board table, td {
-    border: 2px solid black;
     border-collapse: collapse;
 }
 
 .game-board table td{
-    height: 30px;
-    width: 30px;
+    border: 7px outset #DEB8C1;
+    height: 25px;
+    width: 25px;
+    background-color: #ecc1c1;
 }
 
 .hidden {
     display: none;
 }
+
