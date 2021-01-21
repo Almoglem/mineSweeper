@@ -35,7 +35,7 @@ function init() {
     if (gLevel.size === 4) gElLives.innerText = '💟'
     else gElLives.innerText = '💟💟💟'
 
-    if (gLevel.bestTime === 'Infinity') return;
+    if (gLevel.bestTime === Infinity) return;
     var elBestTimeDisplay = document.querySelector('.best-time');
 
     if (gLevel.bestTime < 60) elBestTimeDisplay.innerText = `Best time: ${gLevel.bestTime} seconds`
