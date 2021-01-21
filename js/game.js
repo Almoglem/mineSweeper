@@ -32,6 +32,9 @@ function init() {
     gBoard = buildBoard(gLevel.size);
     renderBoard(gBoard);
 
+    if (gLevel.size === 4) gElLives.innerText = '💟'
+    else gElLives.innerText = '💟💟💟'
+
     if (gLevel.bestTime === Infinity) return;
     var elBestTimeDisplay = document.querySelector('.best-time');
 
@@ -40,8 +43,6 @@ function init() {
         var bestTimeMins = (gLevel.bestTime / 60).toFixed(2)
         elBestTimeDisplay.innerText = `Best time: ${bestTimeMins} minutes`
     }
-    if (gLevel.size === 4) gElLives.innerText = '💟'
-    else gElLives.innerText = '💟💟💟'
 }
 
 function handleLevel(level) {
