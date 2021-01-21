@@ -106,6 +106,7 @@ function setMinesNegsCount() {
         for (var j = 0; j < gBoard[0].length; j++) {
             if (gBoard[i][j].isMine) continue;
             var minesCount = countMines(gBoard, i, j);
+            if (minesCount === 0) minesCount = ' '
             gBoard[i][j].minesAroundCount = minesCount;
         }
     }
@@ -115,6 +116,7 @@ function setMinesNegsCount() {
 
 function cellClicked(elCell, i, j) {
     var cell = gBoard[i][j];
+    if (cell.isMarked) return;
 
     ///first click of the game- places mines and sets game on
     if (!gGame.isOn && gGame.firstClick) {
@@ -161,13 +163,14 @@ function handleFlag(i, j) {
     var cell = gBoard[i][j];
 
     if (!gGame.isOn) return;
-    if (cell.isShown) return;
+    if (cell.isShown && !cell.isMine) return;
 
     if (!cell.isMarked) {
         renderCell(i, j, FLAG);
         cell.isMarked = true;
         if (isWin()) gameOver('win');
     } else {
+        if (cell.isMine) return;
         renderCell(i, j, ' ');
         cell.isMarked = false;
     }
