@@ -126,6 +126,7 @@ function cellClicked(elCell, i, j) {
 
         ///mine
     } else if (cell.isMine) {
+        cell.isShown = true;
         if (gLevel.lives > 1) {
             gLevel.lives--;
             renderCell(i, j, MINE);
@@ -161,7 +162,6 @@ function handleFlag(i, j) {
 
     if (!gGame.isOn) return;
     if (cell.isShown) return;
-    if (cell.isMine) return;
 
     if (!cell.isMarked) {
         renderCell(i, j, FLAG);
