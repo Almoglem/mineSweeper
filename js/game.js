@@ -161,6 +161,7 @@ function handleFlag(i, j) {
 
     if (!gGame.isOn) return;
     if (cell.isShown) return;
+    if (cell.isMine) return;
 
     if (!cell.isMarked) {
         renderCell(i, j, FLAG);
