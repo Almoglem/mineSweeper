@@ -248,7 +248,6 @@ function guideToggle() {
     var elGuideBtn = document.querySelector('.guide-btn');
     if (elGuideBtn.innerText === '❌') elGuideBtn.innerText = '❔';
     else elGuideBtn.innerText = '❌';
-
     var elGuide = document.querySelector('.guide');
     elGuide.classList.toggle('hidden');
 }
