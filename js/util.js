@@ -1,3 +1,4 @@
+'use strict';
 
 /////////////// renders 
 
@@ -16,7 +17,6 @@ function renderBoard(board) {
     document.querySelector('.game-board table').innerHTML = strHTML;
 }
 
-
 function renderCell(i, j, value) {
     var elCell = document.querySelector(`.cell${i}-${j}`);
     elCell.innerHTML = value;
@@ -30,7 +30,7 @@ function renderBombs() {
     }
 }
 
-function renderNegs(mat, rowIdx, colIdx) {
+function renderNegs(mat, rowIdx, colIdx, degree) {
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
         if (i < 0 || i > mat.length - 1) continue;
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
@@ -43,6 +43,7 @@ function renderNegs(mat, rowIdx, colIdx) {
             renderCell(i, j, currNr.minesAroundCount);
             currNr.isShown = true;
             document.querySelector(`.cell${i}-${j}`).style = 'background-color: #e4d1d1;'
+            if (degree === 1) return;
             if (!currNr.minesAroundCount) renderNegs(mat, i, j);
         }
     }
@@ -54,9 +55,10 @@ function renderNegs(mat, rowIdx, colIdx) {
 var gStartTime;
 var gTimeElasped;
 var gTimeInterval;
+var gElBestTimeDisplay = document.querySelector('.best-time');
 
 function startClock() {
-    elTimer = document.querySelector('.timer');
+    var elTimer = document.querySelector('.timer');
     gTimeInterval = setInterval(function () {
         var timeArr = new Date(gGame.secsPassed * 1000).toString().split(':');
         var minutes = timeArr[1];

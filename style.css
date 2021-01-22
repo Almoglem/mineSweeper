@@ -2,13 +2,15 @@ body {
     text-align: center;
     background-color:#FFD8CC;
     font-family: 'Chakra Petch', sans-serif;
+    color: #4e4e4e;
 }
 
 h1 {
-    color: rgb(78, 78, 78);
     font-size: 30px;
     margin: 1% auto;
 }
+
+/* main game area */
 
 .game-main {
     margin: auto;
@@ -28,15 +30,9 @@ button:active {
 }
 
 
-.lives {
-    position: absolute;
-    margin-top: 0.5%;
-}
-
 .game-board table{
     margin: auto;
 }
-
 
 .game-board table, td {
     border-collapse: collapse;
@@ -49,13 +45,17 @@ button:active {
     background-color: #ecc1c1;
 }
 
-.hidden {
-    display: none;
+
+.game-board table td:hover{
+    background-color: #c7a7a7;
 }
 
+
 span.player{
-font-size: x-large;
+    font-size: x-large;
 }
+
+/* guide area */
 
 .guide {
     text-align: left;
@@ -74,4 +74,11 @@ font-size: x-large;
     position: absolute;
     top: 20px;
     left: 10px;
+}
+
+
+/* universal */
+
+.hidden {
+    display: none;
 }

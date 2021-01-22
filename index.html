@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="icon" href="favicon.ico" />
 </head>
 
 <body onload="init('easy')">
@@ -17,17 +15,18 @@
     <div class="game-main">
         <div class="options-info">
             <span class="level-choice">
-                <button onclick="handleLevel('easy')">easy</button>
-                <button onclick="handleLevel('medium')">medium</button>
-                <button onclick="handleLevel('hard')">hard</button></span>
+                <button onclick="handleLevel('easy')">easy <br>💣2</button>
+                <button onclick="handleLevel('medium')">medium<br>💣12</button>
+                <button onclick="handleLevel('hard')">hard <br>💣30</button></span>
             <br>
-            <span class="timer">00:00</span>
-            <br>
-            <span class="player" onclick="restart()"></span> <span class="lives"></span>
+            <span class="sneak-peek" onclick="sneakPeekOn()">💡</span>
+            <span class="player" onclick="restart()"></span>
+            <span class="lives"></span>
         </div>
         <div class="game-board">
             <table></table>
         </div>
+        <span class="timer">00:00</span>
         <div class="best-time"></div>
     </div>
 
@@ -35,18 +34,21 @@
     <div class="guide">
         welcome! <br>
         <br>
-        💣your goal is to mark all mines with flags. <br>
-        you win when all mines are flagged and all other cells are shown. <br> <br>
-        🏁you flag by using right click. you can right click again to unflag a cell. <br>
-        📱playing from your android? long press to flag
+        🧨your goal is to mark all mines with flags. <br>
+        you win when all mines are flagged and all other tiles are shown. <br> <br>
+        🏁right click to flag. right click again to unflag a tile. <br>
+        📱playing from your android? long press to flag / unflag.
+        <br><br>
+        💡use a hint to reveal a tile and all it's surroundings for 1 second
+        <br><br>
+        🐈restart anytime by clicking on the cat face <br>
         <br>
-        <br>
-        💢play again or restart anytime by clicking on the cat <br>
-        <br>
-        good luck, and DON'T BLOW IT UP!
+        good luck, and DON'T BLOW IT UP! 💢
     </div>
+
     <script src="js/util.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/helpers.js"></script>
 </body>
 
 </html>

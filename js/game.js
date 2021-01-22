@@ -1,3 +1,5 @@
+'use strict';
+
 const MINE = '💣';
 const FLAG = '🚩'
 const NORMAL = '🐱'
@@ -6,6 +8,10 @@ const SAD = '😿';
 const DEAD = '🙀';
 const HAPPY_WIN = '😻';
 var gElPlayer = document.querySelector('.player'); /// global as used several times in different functions
+
+var winSound = new Audio('audio/win.wav');
+var loseSound = new Audio('audio/lose.wav');
+var bombSound = new Audio('audio/bomb.mp3');
 
 var gBoard;
 
@@ -32,16 +38,15 @@ function init() {
     gBoard = buildBoard(gLevel.size);
     renderBoard(gBoard);
 
-    if (gLevel.size === 4) gElLives.innerText = '💟'
-    else gElLives.innerText = '💟💟💟'
+    gElLives.innerText = (gLevel.size === 4) ? '💟' : '💟💟💟';
+    document.querySelector('.sneak-peek').innerText = (gLevel.size === 4) ? '💡' : '💡💡💡';
 
     if (!gLevel.bestTime || gLevel.bestTime === Infinity) return;
-    var elBestTimeDisplay = document.querySelector('.best-time');
 
-    if (gLevel.bestTime < 60) elBestTimeDisplay.innerText = `Best time: ${gLevel.bestTime} seconds`
+    if (gLevel.bestTime < 60) gElBestTimeDisplay.innerText = `⏰record: ${gLevel.bestTime} secs`
     else if (gLevel.bestTime > 60) {
         var bestTimeMins = (gLevel.bestTime / 60).toFixed(2)
-        elBestTimeDisplay.innerText = `Best time: ${bestTimeMins} minutes`
+        gElBestTimeDisplay.innerText = `⏰record: ${bestTimeMins} mins`
     }
 }
 
@@ -51,18 +56,21 @@ function handleLevel(level) {
             gLevel.size = 4;
             gLevel.mines = 2;
             gLevel.lives = 1;
+            gLevel.hints = 1;
             gLevel.bestTime = +localStorage.besttimeeasy;
             break;
         case 'medium':
             gLevel.size = 8;
             gLevel.mines = 12;
             gLevel.lives = 3;
+            gLevel.hints = 3;
             gLevel.bestTime = +localStorage.besttimemedium;
             break;
         case 'hard':
             gLevel.size = 12;
             gLevel.mines = 30;
             gLevel.lives = 3;
+            gLevel.hints = 3;
             gLevel.bestTime = +localStorage.besttimehard;
             break;
     }
@@ -143,16 +151,20 @@ function cellClicked(elCell, i, j) {
         startClock();
         setMinesNegsCount();
         gElPlayer.innerText = HAPPY;
-
-        ///mine
-    } else if (cell.isMine) {
+    }
+    else if (gSneakPeekOn) {
+        showSneakPeek(i, j);
+        return;
+    }
+    else if (cell.isMine) {
+        bombSound.play();
         cell.isShown = true;
         if (gLevel.lives > 1) {
             gLevel.lives--;
             renderCell(i, j, MINE);
             ///render the updated lives
-            if (gLevel.lives === 2) gElLives.innerText = '💟💟';
-            else if (gLevel.lives === 1) gElLives.innerText = '💟';
+            if (gLevel.lives === 2) gElLives.innerText = '💟💟💔';
+            else if (gLevel.lives === 1) gElLives.innerText = '💟💔💔';
             gElPlayer.innerText = SAD;
             return;
         }
@@ -165,12 +177,9 @@ function cellClicked(elCell, i, j) {
 
     /// rest- as long as game is on and cell is not mine
     if (gGame.isOn) {
-        ///// cell with mines around
         if (cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
-        ///// cell with no mines around- show neighboars
-        else {
-            renderNegs(gBoard, i, j);
-        }
+        else renderNegs(gBoard, i, j);
+
         /// in any case:
         elCell.style = 'background-color: #e4d1d1;'
         cell.isShown = true;
@@ -212,9 +221,11 @@ function gameOver(status) {
         } else if (gLevel.size === 12) {
             if (currGameTime < +localStorage.besttimehard) localStorage.besttimehard = currGameTime;
         }
+        winSound.play();
     } else if (status === 'lost') {
-        gElLives.innerText = '💔';
+        gElLives.innerText = '💔💔💔';
         gElPlayer.innerText = DEAD;
+        loseSound.play();
     }
 }
 
@@ -239,6 +250,7 @@ function restart() {
     document.querySelector('.timer').innerHTML = '00:00';
     gStartTime = null;
     gTimeElasped = null;
+    gLevel.hints = (gLevel.size === 4) ? 1 : 3;
     document.querySelector('.best-time').innerText = '';
     init();
 }
@@ -252,3 +264,4 @@ function guideToggle() {
     var elGuide = document.querySelector('.guide');
     elGuide.classList.toggle('hidden');
 }
+
