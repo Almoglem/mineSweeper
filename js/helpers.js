@@ -1,7 +1,8 @@
 
 'use strict'
 
-/// cell & neighboars sneak peak
+/// sneak peek
+
 var gSneakPeekOn = false;
 
 function sneakPeekOn() {
@@ -12,13 +13,13 @@ function sneakPeekOn() {
 
     var elLightBulbs = document.querySelector('.sneak-peek');
     if (gLevel.size === 4) {
-        elLightBulbs.innerText = '✨';
+        elLightBulbs.innerText = '✖️';
         return;
     }
 
-    if (gLevel.hints === 2) elLightBulbs.innerText = '💡💡✨'
-    else if (gLevel.hints === 1) elLightBulbs.innerText = '💡✨✨'
-    else elLightBulbs.innerText = '✨✨✨'
+    if (gLevel.hints === 2) elLightBulbs.innerText = '💡💡✖️'
+    else if (gLevel.hints === 1) elLightBulbs.innerText = '💡✖️✖️'
+    else elLightBulbs.innerText = '✖️✖️✖️'
 }
 
 function showSneakPeek(rowIdx, colIdx) {
@@ -33,12 +34,10 @@ function showSneakPeek(rowIdx, colIdx) {
             else if (currCell.minesAroundCount) renderCell(i, j, currCell.minesAroundCount);
             else renderCell(i, j, ' ');
             var elCell = document.querySelector(`.cell${i}-${j}`);
-            // elCell.style = 'background-color: #d49d9d' 
+            elCell.classList.add('peeked');
 
             setTimeout(renderCell, 1000, i, j, ' ');
-            // setTimeout(() => {
-            //     elCell.style = 'background-color: #ecc1c1' //// BUG- only returns 1 to the original color ***
-            // }, 1000);
+            setTimeout(removeClass, 1000, i, j, 'peeked');
 
         }
     }
@@ -46,5 +45,17 @@ function showSneakPeek(rowIdx, colIdx) {
 }
 
 
-//// *** additionally, when using elCell.classList.addClass('whatever-class'), the class's background-color will not work for some reason.
-/// it will change the cell's content using color but will not change the background using background-color.
+
+
+
+//// SAFE CLICK
+/// make a loop to find cells who are not mines and are not shown (if (cell.isMine || cell.isShown) continue; )
+/// push the i and j into an object {i: i, j: j} in an array safeCells
+/// safeCells = [] ||| loop part ||| safeCells.push({i: i, j: j});
+/// randomly pick an object from the array using getRandomInt: 
+/// var safeCellIdx = safeCells[getRandomInt(0, safeCells.length)]
+/// we will receive an object {i: i, j: j}
+/// manipulate DOM of gBoard[safeCell.i][safeCell.j] to appear in certain color
+///then return to normal color after few seconds using a timeout function
+
+

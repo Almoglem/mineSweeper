@@ -9,7 +9,7 @@ const DEAD = '🙀';
 const HAPPY_WIN = '😻';
 var gElPlayer = document.querySelector('.player'); /// global as used several times in different functions
 
-var winSound = new Audio('audio/win.wav');
+var winSound = new Audio('audio/win.mp3');
 var loseSound = new Audio('audio/lose.wav');
 var bombSound = new Audio('audio/bomb.mp3');
 
@@ -23,7 +23,7 @@ var gGame = {
 var gLevel = { size: 4, mines: 2, lives: 1, bestTime: +localStorage.besttimeeasy }; /// SET TO EASY BY DEFULT
 var gElLives = document.querySelector('.lives');
 
-//// note about everything related to localStorage: it works, but my code is probably a bit messy / repetitive
+//// note about everything related to localStorage: it works, but my code is kinda messy / repetitive
 //// as i haven't got to practice it's use yet
 
 if (!localStorage.besttimeeasy) localStorage.setItem("besttimeeasy", Infinity);
@@ -42,12 +42,7 @@ function init() {
     document.querySelector('.sneak-peek').innerText = (gLevel.size === 4) ? '💡' : '💡💡💡';
 
     if (!gLevel.bestTime || gLevel.bestTime === Infinity) return;
-
-    if (gLevel.bestTime < 60) gElBestTimeDisplay.innerText = `⏰record: ${gLevel.bestTime} secs`
-    else if (gLevel.bestTime > 60) {
-        var bestTimeMins = (gLevel.bestTime / 60).toFixed(2)
-        gElBestTimeDisplay.innerText = `⏰record: ${bestTimeMins} mins`
-    }
+    updateBestTime();
 }
 
 function handleLevel(level) {
@@ -180,8 +175,8 @@ function cellClicked(elCell, i, j) {
         if (cell.minesAroundCount > 0) elCell.innerText = cell.minesAroundCount;
         else renderNegs(gBoard, i, j);
 
-        /// in any case:
-        elCell.style = 'background-color: #e4d1d1;'
+        /// in any case other than sneakpeek/mine:
+        elCell.classList.add('pressed');
         cell.isShown = true;
         if (isWin()) gameOver('win');
     }
@@ -210,20 +205,14 @@ function handleFlag(i, j) {
 function gameOver(status) {
     stopClock();
     gGame.isOn = false;
-
     if (status === 'win') {
         gElPlayer.innerText = HAPPY_WIN;
-        var currGameTime = gGame.secsPassed;
-        if (gLevel.size === 4) {
-            if (currGameTime < +localStorage.besttimeeasy) localStorage.besttimeeasy = currGameTime;
-        } else if (gLevel.size === 8) {
-            if (currGameTime < +localStorage.besttimemedium) localStorage.besttimemedium = currGameTime;
-        } else if (gLevel.size === 12) {
-            if (currGameTime < +localStorage.besttimehard) localStorage.besttimehard = currGameTime;
-        }
+        checkBestTime(gLevel.size);
+        updateBestTime();
         winSound.play();
-    } else if (status === 'lost') {
-        gElLives.innerText = '💔💔💔';
+    }
+    else if (status === 'lost') {
+        gElLives.innerText = (gLevel.size === 4) ? '💔' : '💔💔💔';
         gElPlayer.innerText = DEAD;
         loseSound.play();
     }
