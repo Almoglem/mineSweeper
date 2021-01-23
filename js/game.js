@@ -15,12 +15,9 @@ var bombSound = new Audio('audio/bomb.mp3');
 
 var gBoard;
 
-var gGame = {
-    isOn: false, firstClick: true,
-    shownCount: 0, markedCount: 0, secsPassed: 0
-}
-
+var gGame = { isOn: false, firstClick: true, shownCount: 0, markedCount: 0, secsPassed: 0 }
 var gLevel = { size: 4, mines: 2, lives: 1, bestTime: +localStorage.besttimeeasy, safeClicks: 1 }; /// SET TO EASY BY DEFULT
+
 var gElLives = document.querySelector('.lives');
 
 var gMoves = [];
@@ -48,9 +45,9 @@ function init() {
     updateBestTime();
 }
 
-function handleLevel(level) {
-    switch (level) {
-        case 'easy':
+function handleLevel(levelSize) {
+    switch (levelSize) {
+        case 4:
             gLevel.size = 4;
             gLevel.mines = 2;
             gLevel.lives = 1;
@@ -58,7 +55,7 @@ function handleLevel(level) {
             gLevel.safeClicks = 1;
             gLevel.bestTime = +localStorage.besttimeeasy;
             break;
-        case 'medium':
+        case 8:
             gLevel.size = 8;
             gLevel.mines = 12;
             gLevel.lives = 3;
@@ -66,7 +63,7 @@ function handleLevel(level) {
             gLevel.safeClicks = 2;
             gLevel.bestTime = +localStorage.besttimemedium;
             break;
-        case 'hard':
+        case 12:
             gLevel.size = 12;
             gLevel.mines = 30;
             gLevel.lives = 3;
@@ -261,6 +258,7 @@ function restart() {
     gStartTime = null;
     gTimeElasped = null;
     gLevel.hints = (gLevel.size === 4) ? 1 : 3;
+    gLevel.lives = (gLevel.size === 4) ? 1 : 3;
     gLevel.safeClicks = (gLevel.size === 4) ? 1 : (gLevel.size === 8) ? 2 : 3;
     gMoves = [];
     gNrMoves = [];
