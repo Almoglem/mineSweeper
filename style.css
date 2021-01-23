@@ -7,15 +7,21 @@ body {
 
 h1 {
     font-size: 30px;
-    margin: 1% auto;
+    margin-bottom: 1%;
 }
 
 /* main game area */
 
 .game-main {
-    margin: auto;
+    margin-right: auto;
     background-color: #ffd0c4;
     display: inline-block;
+    border-radius: 10%;
+    padding: 0 2%;
+}
+
+.player{
+    font-size: x-large;
 }
 
 
@@ -29,6 +35,9 @@ button:active {
     font-weight: bold;
 }
 
+button:hover, .safe-click:hover, .guide-btn:hover, .player:hover, .sneak-peek:hover {
+    cursor: pointer;
+}
 
 .game-board table{
     margin: auto;
@@ -50,9 +59,23 @@ button:active {
     background-color: #c7a7a7;
 }
 
+.timer {
+    display: inline-block;
+    margin-top: 2%;
+    color: black;
+    text-shadow: 0px 0px 7px rgb(252, 234, 234), 0px 0px 7px #ffffff
+}
 
-span.player{
-    font-size: x-large;
+.best-time {
+font-size: 15px;
+}
+
+.undo-btn {
+    display: inline-block;
+    position: relative;
+    left: 100px;
+    background-color: #ffe9ee;
+    border: none;
 }
 
 /* guide area */
@@ -76,17 +99,21 @@ span.player{
     left: 10px;
 }
 
-
-/* universal */
-
 .hidden {
     display: none;
 }
 
+/* cells changes during game */
+
 .pressed {
     background-color: #e4d1d1
 }
-
+    
 .peeked {
     background-color: #d49d9d;
 }
+    
+.safe {
+    background-color: #fad9d9;
+}
+
