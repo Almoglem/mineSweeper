@@ -11,7 +11,6 @@ var gElPlayer = document.querySelector('.player'); /// global as used several ti
 
 var winSound = new Audio('audio/win.mp3');
 var loseSound = new Audio('audio/lose.wav');
-var bombSound = new Audio('audio/bomb.mp3');
 
 var gBoard;
 
@@ -159,7 +158,7 @@ function cellClicked(elCell, i, j) {
     }
     ///mine
     else if (cell.isMine) {
-        bombSound.play();
+        loseSound.play();
         cell.isShown = true;
         /// in case life left
         if (gLevel.lives > 1) {
