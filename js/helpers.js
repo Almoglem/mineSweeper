@@ -66,7 +66,6 @@ function undo() {
     if (!gGame.isOn) return;
     if (!gMoves.length) return;
     var move = gMoves.pop();
-
     if (Array.isArray(move)) {
         for (var i = 0; i < move.length; i++) {
             var currMove = move[i];
@@ -84,6 +83,6 @@ function reverseMove(obj) {
         gElLives.innerText = (gElLives.innerText === '💟💟💔') ? '💟💟💟' : '💟💟💔';
         document.querySelector('.player').innerText = HAPPY;
     }
-    document.querySelector(`.cell${obj.iPos}-${obj.jPos}`).classList.remove('pressed');
-    renderCell(obj.iPos, obj.jPos, ' ');
+    document.querySelector(`.cell${obj.pos.i}-${obj.pos.j}`).classList.remove('pressed');
+    renderCell(obj.pos.i, obj.pos.j, ' ');
 }

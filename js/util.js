@@ -1,20 +1,17 @@
 'use strict';
-
-/// render functions & timer functions & others
-
+var gNrMoves = [];
 
 function handleAudio() {
     var elAudioControl = document.querySelector('.audio-control');
-    if (gIsSoundOn) {
-        gIsSoundOn = false;
+    if (gGame.isSoundOn) {
+        gGame.isSoundOn = false;
         elAudioControl.innerText = '🔇 muted'
     }
     else {
-        gIsSoundOn = true;
+        gGame.isSoundOn = true;
         elAudioControl.innerText = '🔊 sound on'
     }
 }
-
 
 /////////////// renders 
 
@@ -45,8 +42,6 @@ function renderBombs() {
         }
     }
 }
-
-var gNrMoves = [];
 
 function renderNegs(mat, rowIdx, colIdx, degree) {
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
@@ -98,21 +93,19 @@ function stopClock() {
     gTimeInterval = null;
 }
 
-function checkBestTime(levelSize) {
+
+function setBestTime(levelSize) {
+    var level = (levelSize === 4) ? 'besttimeeasy' : (levelSize === 8) ? 'besttimemedium' : 'besttimehard';
     var currGameTime = gGame.secsPassed;
-    if (levelSize === 4) {
-        if (currGameTime < +localStorage.besttimeeasy) localStorage.besttimeeasy = currGameTime;
-        gLevel.bestTime = localStorage.besttimeeasy;
-    } else if (levelSize === 8) {
-        if (currGameTime < +localStorage.besttimemedium) localStorage.besttimemedium = currGameTime;
-        gLevel.bestTime = localStorage.besttimemedium;
-    } else if (levelSize === 12) {
-        if (currGameTime < +localStorage.besttimehard) localStorage.besttimehard = currGameTime;
-        gLevel.bestTime = localStorage.besttimehard;
+
+    if (!localStorage[level] || currGameTime < +localStorage[level]) {
+        localStorage.setItem(level, currGameTime);
+        gLevel.bestTime = localStorage[level];
+        renderBestTime();
     }
 }
 
-function updateBestTime() {
+function renderBestTime() {
     if (gLevel.bestTime < 60) gElBestTimeDisplay.innerText = `⏰record: ${gLevel.bestTime} secs`
     else if (gLevel.bestTime > 60) {
         var bestTimeMins = (gLevel.bestTime / 60).toFixed(2)

@@ -7,27 +7,20 @@ const HAPPY = '😸';
 const SAD = '😿';
 const DEAD = '🙀';
 const HAPPY_WIN = '😻';
-var gElPlayer = document.querySelector('.player'); /// global as used several times in different functions
+
+///declared globaly because of use in several functions
+var gElLives = document.querySelector('.lives');
+var gElPlayer = document.querySelector('.player');
+/// NOTE: was suggested in CR to try and minimize global vars in general
+
 
 var winSound = new Audio('audio/win.mp3');
 var loseSound = new Audio('audio/lose.wav');
-var gIsSoundOn = true;
 
 var gBoard;
-
-var gGame = { isOn: false, firstClick: true, shownCount: 0, markedCount: 0, secsPassed: 0 }
+var gGame = { isOn: false, firstClick: true, shownCount: 0, markedCount: 0, secsPassed: 0, isSoundOn: true }
 var gLevel = { size: 4, mines: 2, lives: 1, bestTime: +localStorage.besttimeeasy, safeClicks: 1 }; /// SET TO EASY BY DEFULT
-
-var gElLives = document.querySelector('.lives');
-
 var gMoves = [];
-
-//// note about everything related to localStorage: it works, but my code is kinda messy / repetitive
-//// as i haven't got to practice it's use yet
-
-if (!localStorage.besttimeeasy) localStorage.setItem("besttimeeasy", Infinity);
-if (!localStorage.besttimemedium) localStorage.setItem("besttimemedium", Infinity);
-if (!localStorage.besttimehard) localStorage.setItem("besttimehard", Infinity);
 
 
 ///////////////  game starting functions 
@@ -41,8 +34,8 @@ function init() {
     document.querySelector('.sneak-peek').innerText = (gLevel.size === 4) ? '💡' : '💡💡💡';
     document.querySelector('.safe-click').innerText = (gLevel.size === 4) ? `🧐` : (gLevel.size === 8) ? '🧐🧐' : '🧐🧐🧐'
 
-    if (!gLevel.bestTime || gLevel.bestTime === Infinity) return;
-    updateBestTime();
+    if (!gLevel.bestTime) return;
+    renderBestTime();
 }
 
 function handleLevel(levelSize) {
@@ -87,8 +80,7 @@ function buildBoard() {
                 isShown: false,
                 isMine: false,
                 isMarked: false,
-                iPos: i,
-                jPos: j
+                pos: { i: i, j: j }
             }
             board[i].push(cell);
         }
@@ -131,7 +123,7 @@ function setMinesNegsCount() {
         for (var j = 0; j < gBoard[0].length; j++) {
             if (gBoard[i][j].isMine) continue;
             var minesCount = countMines(gBoard, i, j);
-            if (minesCount === 0) minesCount = '';
+            if (!minesCount) minesCount = '';
             gBoard[i][j].minesAroundCount = minesCount;
         }
     }
@@ -159,7 +151,7 @@ function cellClicked(elCell, i, j) {
     }
     ///mine
     else if (cell.isMine) {
-        if (gIsSoundOn) loseSound.play();
+        if (gGame.isSoundOn) loseSound.play();
         cell.isShown = true;
         /// in case life left
         if (gLevel.lives > 1) {
@@ -204,8 +196,7 @@ function cellClicked(elCell, i, j) {
 function handleFlag(i, j) {
     var cell = gBoard[i][j];
 
-    if (!gGame.isOn) return;
-    if (cell.isShown && !cell.isMine) return;
+    if (!gGame.isOn || cell.isShown && !cell.isMine) return;
 
     if (!cell.isMarked) {
         renderCell(i, j, FLAG);
@@ -225,14 +216,13 @@ function gameOver(status) {
     gGame.isOn = false;
     if (status === 'win') {
         gElPlayer.innerText = HAPPY_WIN;
-        checkBestTime(gLevel.size);
-        updateBestTime();
-        if (gIsSoundOn) winSound.play();
+        setBestTime(gLevel.size);
+        if (gGame.isSoundOn) winSound.play();
     }
     else if (status === 'lost') {
         gElLives.innerText = (gLevel.size === 4) ? '💔' : '💔💔💔';
         gElPlayer.innerText = DEAD;
-        if (gIsSoundOn) loseSound.play();
+        if (gGame.isSoundOn) loseSound.play();
     }
 }
 
